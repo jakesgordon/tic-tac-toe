@@ -53,6 +53,7 @@ export class Player {
   waitingTurn() { this.state = PlayerState.WaitingTurn }
   won()         { this.state = PlayerState.Won         }
   lost()        { this.state = PlayerState.Lost        }
+  tied()        { this.state = PlayerState.Tied        }
 
   toJSON() {
     return {
@@ -226,6 +227,22 @@ export class Lobby {
         player: opponent,
         opponent: player,
         line
+      })
+    }
+
+    if (board.isTie()) {
+      player.tied()
+      opponent.tied()
+
+      player.send({
+        type: Event.PlayerTied,
+        player,
+        opponent,
+      })
+      opponent.send({
+        type: Event.PlayerTied,
+        player: opponent,
+        opponent: player,
       })
     }
   }
