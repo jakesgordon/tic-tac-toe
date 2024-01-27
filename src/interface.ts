@@ -33,6 +33,8 @@ export enum WinningLine {
 export enum PlayerState {
   Joining     = "Joining",
   WaitingGame = "WaitingGame",
+  TakingTurn  = "TakingTurn",
+  WaitingTurn = "WaitingTurn",
 }
 
 //=================================================================================================
@@ -73,6 +75,7 @@ export type AnyCommand =
 export enum Event {
   Pong        = "Pong",
   PlayerReady = "PlayerReady",
+  GameStarted = "GameStarted",
 }
 
 export interface PongEvent {
@@ -84,8 +87,15 @@ export interface PlayerReadyEvent {
   player: Player;
 }
 
+export interface GameStartedEvent {
+  type: Event.GameStarted;
+  player: Player;
+  opponent: Player;
+}
+
 export type AnyEvent =
   | PongEvent
   | PlayerReadyEvent
+  | GameStartedEvent
 
 //-------------------------------------------------------------------------------------------------

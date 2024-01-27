@@ -20,9 +20,12 @@ interface Client {
 }
 
 export class Player {
-  client: Client
-  name:   string
-  state:  PlayerState
+  client:    Client
+  name:      string
+  state:     PlayerState
+  board?:    Board
+  opponent?: Player
+  piece?:    Piece
 
   constructor(client: Client) {
     this.client = client
@@ -39,10 +42,18 @@ export class Player {
     this.state = PlayerState.WaitingGame
   }
 
+  start(board: Board, opponent: Player, piece: Piece, state: PlayerState.TakingTurn | PlayerState.WaitingTurn) {
+    this.state    = state
+    this.board    = board
+    this.opponent = opponent
+    this.piece    = piece
+  }
+
   toJSON() {
     return {
-      state: this.state,
       name:  this.name,
+      state: this.state,
+      piece: this.piece,
     }
   }
 
@@ -145,8 +156,36 @@ export class Lobby {
       type: Event.PlayerReady,
       player: player,
     })
+    this.start(player)
   }
 
+  private start(player: Player) {
+    const opponent = this.findOpponent(player)
+    if (opponent) {
+      const board = new Board()
+
+      opponent.start(board, player,   Piece.Cross, PlayerState.TakingTurn)
+      player.start(board,   opponent, Piece.Dot,   PlayerState.WaitingTurn)
+
+      player.send({
+        type: Event.GameStarted,
+        player: player,
+        opponent,
+      })
+      opponent.send({
+        type: Event.GameStarted,
+        player: opponent,
+        opponent: player,
+      })
+    }
+  }
+
+  private findOpponent(player: Player) {
+    for (const other of this.players.values()) {
+      if ((other.state === PlayerState.WaitingGame) && (other !== player))
+        return other
+    }
+  }
 }
 
 //=================================================================================================
