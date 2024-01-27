@@ -51,6 +51,8 @@ export class Player {
 
   takingTurn()  { this.state = PlayerState.TakingTurn  }
   waitingTurn() { this.state = PlayerState.WaitingTurn }
+  won()         { this.state = PlayerState.Won         }
+  lost()        { this.state = PlayerState.Lost        }
 
   toJSON() {
     return {
@@ -201,13 +203,31 @@ export class Lobby {
       opponent,
       position,
     })
-
     opponent.send({
       type: Event.OpponentTookTurn,
       player: opponent,
       opponent: player,
       position,
     })
+
+    const line = board.hasWon(player.piece)
+    if (line) {
+      player.won()
+      opponent.lost()
+
+      player.send({
+        type: Event.PlayerWon,
+        player,
+        opponent,
+        line
+      })
+      opponent.send({
+        type: Event.PlayerLost,
+        player: opponent,
+        opponent: player,
+        line
+      })
+    }
   }
 
   private findOpponent(player: Player) {
