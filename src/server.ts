@@ -8,7 +8,8 @@ import {
   Command,
   Event,
   AnyCommand,
-  AnyEvent
+  AnyEvent,
+  UnexpectedError,
 } from "./interface"
 
 //=================================================================================================
@@ -35,6 +36,13 @@ export class Player {
 
   send(event: AnyEvent) {
     this.client.send(event)
+  }
+
+  error(error: UnexpectedError) {
+    this.send({
+      type: Event.UnexpectedError,
+      error,
+    })
   }
 
   join(name: string) {
@@ -157,6 +165,8 @@ export class Lobby {
   }
 
   private join(player: Player, name: string) {
+    if (player.state !== PlayerState.Joining)
+      return player.error(UnexpectedError.AlreadyJoined)
     this.players.add(player)
     player.join(name)
     player.send({
@@ -192,7 +202,11 @@ export class Lobby {
     const opponent = player.opponent
 
     if (!board || !opponent || !player.piece || !opponent.piece)
-      throw new Error("TODO: handle errors gracefully")
+      return player.error(UnexpectedError.NotInGame)
+    else if (player.state !== PlayerState.TakingTurn)
+      return player.error(UnexpectedError.OutOfTurn)
+    else if (board.isOccupied(position))
+      return player.error(UnexpectedError.PositionTaken)
 
     board.place(position, player.piece)
     player.waitingTurn()
