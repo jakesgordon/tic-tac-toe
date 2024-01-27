@@ -1,11 +1,52 @@
 import { test, expect } from "vitest"
-import { Board } from "./server"
+import { Player, Board, Lobby } from "./server"
 
 import {
   Piece,
   Position,
-  WinningLine
+  WinningLine,
+  PlayerState,
+  Event,
+  AnyEvent,
+  Command,
 } from "./interface"
+
+//-------------------------------------------------------------------------------------------------
+
+const JAKE = "Jake"
+const AMY  = "Amy"
+
+//-------------------------------------------------------------------------------------------------
+
+function mockClient() {
+  const events: AnyEvent[] = []
+  return {
+    send: (event: AnyEvent) => {
+      events.push(JSON.parse(JSON.stringify(event)) as AnyEvent)
+    },
+    events: () => events.splice(0),
+    flush: () => events.splice(0)
+  }
+}
+
+//-------------------------------------------------------------------------------------------------
+
+function setup() {
+  const client1 = mockClient()
+  const client2 = mockClient()
+  const lobby   = new Lobby()
+  const player1 = new Player(client1)
+  const player2 = new Player(client2)
+  return {
+    lobby,
+    player1,
+    player2,
+    client1,
+    client2,
+    player: player1,
+    client: client1,
+  }
+}
 
 //-------------------------------------------------------------------------------------------------
 
@@ -148,6 +189,31 @@ test("board winning lines", () => {
   expect(board.hasWon(Piece.Cross)).toEqual(false)
   expect(board.hasWon(Piece.Dot)).toEqual(false)
   expect(board.isTie()).toEqual(true)
+})
+
+//-------------------------------------------------------------------------------------------------
+
+test("2 players play a game, player1 wins", () => {
+
+  const { lobby, client1, client2, player1, player2 } = setup()
+
+  lobby.execute(player1, { type: Command.Join, name: JAKE })
+  lobby.execute(player2, { type: Command.Join, name: AMY  })
+
+  expect(client1.events()).toEqual([
+    {
+      type: Event.PlayerReady,
+      player: { name: JAKE, state: PlayerState.WaitingGame }
+    },
+  ])
+
+  expect(client2.events()).toEqual([
+    {
+      type: Event.PlayerReady,
+      player: { name: AMY, state: PlayerState.WaitingGame }
+    },
+  ])
+
 })
 
 //-------------------------------------------------------------------------------------------------
