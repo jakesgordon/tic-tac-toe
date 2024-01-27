@@ -47,7 +47,14 @@ export class Player {
 
   join(name: string) {
     this.name  = name
-    this.state = PlayerState.WaitingGame
+    this.reset()
+  }
+
+  reset() {
+    this.state    = PlayerState.WaitingGame
+    this.board    = undefined
+    this.opponent = undefined
+    this.piece    = undefined
   }
 
   start(board: Board, opponent: Player, piece: Piece, state: PlayerState.TakingTurn | PlayerState.WaitingTurn) {
@@ -153,10 +160,11 @@ export class Lobby {
 
   execute(player: Player, command: AnyCommand) {
     switch(command.type) {
-    case Command.Ping:  return this.pong(player)
-    case Command.Join:  return this.join(player, command.name)
-    case Command.Turn:  return this.turn(player, command.position)
-    case Command.Leave: return this.leave(player)
+    case Command.Ping:   return this.pong(player)
+    case Command.Join:   return this.join(player, command.name)
+    case Command.Turn:   return this.turn(player, command.position)
+    case Command.Leave:  return this.leave(player)
+    case Command.Replay: return this.replay(player)
     }
   }
 
@@ -169,8 +177,12 @@ export class Lobby {
   private join(player: Player, name: string) {
     if (player.state !== PlayerState.Joining)
       return player.error(UnexpectedError.AlreadyJoined)
-    this.players.add(player)
     player.join(name)
+    this.players.add(player)
+    this.ready(player)
+  }
+
+  private ready(player: Player) {
     player.send({
       type: Event.PlayerReady,
       player: player,
@@ -211,6 +223,7 @@ export class Lobby {
       return player.error(UnexpectedError.PositionTaken)
 
     board.place(position, player.piece)
+
     player.waitingTurn()
     opponent.takingTurn()
 
@@ -261,6 +274,11 @@ export class Lobby {
         opponent: player,
       })
     }
+  }
+
+  private replay(player: Player) {
+    player.reset()
+    this.ready(player)
   }
 
   private leave(player: Player) {
