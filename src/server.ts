@@ -4,6 +4,7 @@ import {
   Position,
   Piece,
   WinningLine,
+  PlayerState,
   Command,
   Event,
   AnyCommand,
@@ -20,14 +21,32 @@ interface Client {
 
 export class Player {
   client: Client
+  name:   string
+  state:  PlayerState
 
   constructor(client: Client) {
     this.client = client
+    this.name   = Player.DefaultName
+    this.state  = PlayerState.Joining
   }
 
   send(event: AnyEvent) {
     this.client.send(event)
   }
+
+  join(name: string) {
+    this.name  = name
+    this.state = PlayerState.WaitingGame
+  }
+
+  toJSON() {
+    return {
+      state: this.state,
+      name:  this.name,
+    }
+  }
+
+  static DefaultName = "Anonymous"
 }
 
 //=================================================================================================
@@ -109,6 +128,7 @@ export class Lobby {
   execute(player: Player, command: AnyCommand) {
     switch(command.type) {
     case Command.Ping: return this.pong(player)
+    case Command.Join: return this.join(player, command.name)
     }
   }
 
@@ -117,6 +137,16 @@ export class Lobby {
       type: Event.Pong,
     })
   }
+
+  private join(player: Player, name: string) {
+    this.players.add(player)
+    player.join(name)
+    player.send({
+      type: Event.PlayerReady,
+      player: player,
+    })
+  }
+
 }
 
 //=================================================================================================

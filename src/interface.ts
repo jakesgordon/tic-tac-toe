@@ -30,34 +30,62 @@ export enum WinningLine {
   UpDiagonal   = "up-diagonal",
 }
 
+export enum PlayerState {
+  Joining     = "Joining",
+  WaitingGame = "WaitingGame",
+}
+
+//=================================================================================================
+// INTERFACES
+//=================================================================================================
+
+export interface Player {
+  state: PlayerState;
+  name: string;
+}
+
 //=================================================================================================
 // COMMANDS
 //=================================================================================================
 
 export enum Command {
   Ping = "Ping",
+  Join = "Join",
 }
 
 interface PingCommand {
   type: Command.Ping;
 }
 
+interface JoinCommand {
+  type: Command.Join;
+  name: string;
+}
+
 export type AnyCommand =
   | PingCommand
+  | JoinCommand
 
 //=================================================================================================
 // EVENTS
 //=================================================================================================
 
 export enum Event {
-  Pong = "Pong",
+  Pong        = "Pong",
+  PlayerReady = "PlayerReady",
 }
 
 export interface PongEvent {
   type: Event.Pong;
 }
 
+export interface PlayerReadyEvent {
+  type: Event.PlayerReady;
+  player: Player;
+}
+
 export type AnyEvent =
   | PongEvent
+  | PlayerReadyEvent
 
 //-------------------------------------------------------------------------------------------------
