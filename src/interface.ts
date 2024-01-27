@@ -62,10 +62,11 @@ export interface Player {
 //=================================================================================================
 
 export enum Command {
-  Ping  = "Ping",
-  Join  = "Join",
-  Turn  = "Turn",
-  Leave = "Leave",
+  Ping   = "Ping",
+  Join   = "Join",
+  Turn   = "Turn",
+  Leave  = "Leave",
+  Replay = "Replay",
 }
 
 interface PingCommand {
@@ -86,11 +87,16 @@ interface LeaveCommand {
   type: Command.Leave;
 }
 
+interface ReplayCommand {
+  type: Command.Replay;
+}
+
 export type AnyCommand =
   | PingCommand
   | JoinCommand
   | TurnCommand
   | LeaveCommand
+  | ReplayCommand
 
 //=================================================================================================
 // EVENTS
