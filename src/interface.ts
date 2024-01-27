@@ -35,6 +35,8 @@ export enum PlayerState {
   WaitingGame = "WaitingGame",
   TakingTurn  = "TakingTurn",
   WaitingTurn = "WaitingTurn",
+  Won         = "Won",
+  Lost        = "Lost",
 }
 
 //=================================================================================================
@@ -85,6 +87,8 @@ export enum Event {
   GameStarted       = "GameStarted",
   PlayerTookTurn    = "PlayerTookTurn",
   OpponentTookTurn  = "OpponentTookTurn",
+  PlayerWon         = "PlayerWon",
+  PlayerLost        = "PlayerLost",
 }
 
 export interface PongEvent {
@@ -116,11 +120,27 @@ export interface OpponentTookTurnEvent {
   position: Position;
 }
 
+export interface PlayerWonEvent {
+  type: Event.PlayerWon;
+  player: Player;
+  opponent: Player;
+  line: WinningLine;
+}
+
+export interface PlayerLostEvent {
+  type: Event.PlayerLost;
+  player: Player;
+  opponent: Player;
+  line: WinningLine;
+}
+
 export type AnyEvent =
   | PongEvent
   | PlayerReadyEvent
   | GameStartedEvent
   | PlayerTookTurnEvent
   | OpponentTookTurnEvent
+  | PlayerWonEvent
+  | PlayerLostEvent
 
 //-------------------------------------------------------------------------------------------------
