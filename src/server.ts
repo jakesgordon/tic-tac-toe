@@ -1,5 +1,13 @@
 import { WebSocket, WebSocketServer } from "ws"
-import { Command, Event, AnyCommand, AnyEvent } from "./interface"
+
+import {
+  Position,
+  Piece,
+  Command,
+  Event,
+  AnyCommand,
+  AnyEvent
+} from "./interface"
 
 //=================================================================================================
 // PLAYER
@@ -19,6 +27,41 @@ export class Player {
   send(event: AnyEvent) {
     this.client.send(event)
   }
+}
+
+//=================================================================================================
+// BOARD
+//=================================================================================================
+
+export class Board {
+  private cells!: Record<Position, Piece | undefined>
+
+  constructor() {
+    this.reset()
+  }
+
+  reset() {
+    this.cells = {
+      [Position.TopLeft]:     undefined,
+      [Position.Top]:         undefined,
+      [Position.TopRight]:    undefined,
+      [Position.Left]:        undefined,
+      [Position.Center]:      undefined,
+      [Position.Right]:       undefined,
+      [Position.BottomLeft]:  undefined,
+      [Position.Bottom]:      undefined,
+      [Position.BottomRight]: undefined,
+    }
+  }
+
+  place(position: Position, piece: Piece) {
+    this.cells[position] = piece
+  }
+
+  isOccupied(position: Position) {
+    return this.cells[position] ?? false
+  }
+
 }
 
 //=================================================================================================
