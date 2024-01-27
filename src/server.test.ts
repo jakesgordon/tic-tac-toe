@@ -205,12 +205,22 @@ test("2 players play a game, player1 wins", () => {
       type: Event.PlayerReady,
       player: { name: JAKE, state: PlayerState.WaitingGame }
     },
+    {
+      type: Event.GameStarted,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+    },
   ])
 
   expect(client2.events()).toEqual([
     {
       type: Event.PlayerReady,
       player: { name: AMY, state: PlayerState.WaitingGame }
+    },
+    {
+      type: Event.GameStarted,
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
     },
   ])
 
