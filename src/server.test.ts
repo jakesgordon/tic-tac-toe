@@ -428,3 +428,164 @@ test("2 players play a game, player2 wins", () => {
 })
 
 //-------------------------------------------------------------------------------------------------
+
+test("2 players play a game, ends in a tie", () => {
+
+  const { lobby, client1, client2, player1, player2 } = setup()
+
+  lobby.execute(player1, { type: Command.Join, name: JAKE })
+  lobby.execute(player2, { type: Command.Join, name: AMY  })
+  lobby.execute(player1, { type: Command.Turn, position: Position.Center      })
+  lobby.execute(player2, { type: Command.Turn, position: Position.TopLeft     })
+  lobby.execute(player1, { type: Command.Turn, position: Position.Top         })
+  lobby.execute(player2, { type: Command.Turn, position: Position.Bottom      })
+  lobby.execute(player1, { type: Command.Turn, position: Position.TopRight    })
+  lobby.execute(player2, { type: Command.Turn, position: Position.BottomLeft  })
+  lobby.execute(player1, { type: Command.Turn, position: Position.Left        })
+  lobby.execute(player2, { type: Command.Turn, position: Position.Right       })
+  lobby.execute(player1, { type: Command.Turn, position: Position.BottomRight })
+
+  expect(client1.events()).toEqual([
+    {
+      type: Event.PlayerReady,
+      player: { name: JAKE, state: PlayerState.WaitingGame }
+    },
+    {
+      type: Event.GameStarted,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.Center,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      position: Position.TopLeft,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.Top,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      position: Position.Bottom,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.TopRight,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      position: Position.BottomLeft,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.Left,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      position: Position.Right,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.BottomRight,
+    },
+    {
+      type: Event.PlayerTied,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.Tied },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.Tied },
+    }
+  ])
+
+  expect(client2.events()).toEqual([
+    {
+      type: Event.PlayerReady,
+      player: { name: AMY, state: PlayerState.WaitingGame }
+    },
+    {
+      type: Event.GameStarted,
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+    },
+    {
+      type: Event.OpponentTookTurn,
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      position: Position.Center,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      position: Position.TopLeft,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      position: Position.Top,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      position: Position.Bottom,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.TopRight,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      position: Position.BottomLeft,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.Left,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      position: Position.Right,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.BottomRight,
+    },
+    {
+      type: Event.PlayerTied,
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.Tied },
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.Tied },
+    }
+  ])
+})
+
+//-------------------------------------------------------------------------------------------------
