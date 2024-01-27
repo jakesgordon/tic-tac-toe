@@ -53,6 +53,7 @@ export interface Player {
 export enum Command {
   Ping = "Ping",
   Join = "Join",
+  Turn = "Turn",
 }
 
 interface PingCommand {
@@ -64,18 +65,26 @@ interface JoinCommand {
   name: string;
 }
 
+interface TurnCommand {
+  type: Command.Turn;
+  position: Position;
+}
+
 export type AnyCommand =
   | PingCommand
   | JoinCommand
+  | TurnCommand
 
 //=================================================================================================
 // EVENTS
 //=================================================================================================
 
 export enum Event {
-  Pong        = "Pong",
-  PlayerReady = "PlayerReady",
-  GameStarted = "GameStarted",
+  Pong              = "Pong",
+  PlayerReady       = "PlayerReady",
+  GameStarted       = "GameStarted",
+  PlayerTookTurn    = "PlayerTookTurn",
+  OpponentTookTurn  = "OpponentTookTurn",
 }
 
 export interface PongEvent {
@@ -93,9 +102,25 @@ export interface GameStartedEvent {
   opponent: Player;
 }
 
+export interface PlayerTookTurnEvent {
+  type:     Event.PlayerTookTurn;
+  player:   Player;
+  opponent: Player;
+  position: Position;
+}
+
+export interface OpponentTookTurnEvent {
+  type:     Event.OpponentTookTurn;
+  player:   Player;
+  opponent: Player;
+  position: Position;
+}
+
 export type AnyEvent =
   | PongEvent
   | PlayerReadyEvent
   | GameStartedEvent
+  | PlayerTookTurnEvent
+  | OpponentTookTurnEvent
 
 //-------------------------------------------------------------------------------------------------

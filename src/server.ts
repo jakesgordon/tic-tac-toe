@@ -49,6 +49,9 @@ export class Player {
     this.piece    = piece
   }
 
+  takingTurn()  { this.state = PlayerState.TakingTurn  }
+  waitingTurn() { this.state = PlayerState.WaitingTurn }
+
   toJSON() {
     return {
       name:  this.name,
@@ -140,6 +143,7 @@ export class Lobby {
     switch(command.type) {
     case Command.Ping: return this.pong(player)
     case Command.Join: return this.join(player, command.name)
+    case Command.Turn: return this.turn(player, command.position)
     }
   }
 
@@ -178,6 +182,32 @@ export class Lobby {
         opponent: player,
       })
     }
+  }
+
+  private turn(player: Player, position: Position) {
+    const board    = player.board
+    const opponent = player.opponent
+
+    if (!board || !opponent || !player.piece || !opponent.piece)
+      throw new Error("TODO: handle errors gracefully")
+
+    board.place(position, player.piece)
+    player.waitingTurn()
+    opponent.takingTurn()
+
+    player.send({
+      type: Event.PlayerTookTurn,
+      player,
+      opponent,
+      position,
+    })
+
+    opponent.send({
+      type: Event.OpponentTookTurn,
+      player: opponent,
+      opponent: player,
+      position,
+    })
   }
 
   private findOpponent(player: Player) {
