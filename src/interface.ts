@@ -19,6 +19,17 @@ export enum Position {
   BottomRight = "bottom-right",
 }
 
+export enum WinningLine {
+  TopRow       = "top-row",
+  MiddleRow    = "middle-row",
+  BottomRow    = "bottom-row",
+  LeftColumn   = "left-column",
+  CenterColumn = "center-column",
+  RightColumn  = "right-column",
+  DownDiagonal = "down-diagonal",
+  UpDiagonal   = "up-diagonal",
+}
+
 //=================================================================================================
 // COMMANDS
 //=================================================================================================
