@@ -11,8 +11,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --text-dark:  #444444;
-  --text-light: #FEFEFE;
+  --indigo-500:  rgb(99 102 241);
+  --text-dark:   #444444;
+  --text-light:  #FEFEFE;
+  --font-medium: 500;
+  --spacing-1:   0.25rem;
+  --spacing-2:   0.5rem;
+  --rounded-md:  0.375rem;
+  --shadow-sm:   0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 
 /**************************************************************************************************
@@ -25,6 +31,15 @@ body {
   display:         flex;
   align-items:     center;
   justify-content: center;
+}
+
+button {
+  padding:          var(--spacing-1) var(--spacing-2);
+  border-radius:    var(--rounded-md);
+  box-shadow:       var(--shadow-sm);
+  background-color: var(--indigo-500);
+  color:            var(--text-light);
+  font-weight:      var(--font-medium);
 }
 
 /**************************************************************************************************/
