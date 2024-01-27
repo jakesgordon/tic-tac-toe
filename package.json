@@ -6,11 +6,17 @@
     "dev": "run-p dev:client dev:server",
     "dev:client": "vite",
     "dev:server": "vite-node --watch src/server.ts",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "lint": "eslint **/*.{ts,html}",
+    "lint:fix": "eslint **/*.{ts,html} --fix"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",
     "@types/ws": "^8.5.10",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-html": "^7.1.0",
     "npm-run-all": "^4.1.5",
     "topbar": "^2.0.2",
     "typescript": "^5.3.3",
