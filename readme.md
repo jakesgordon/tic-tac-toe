@@ -11,5 +11,6 @@ _coming soon_
 > npm run dev        # run both client and server
 > npm run dev:client # run client only
 > npm run dev:server # run server only
+> npm run lint       # run eslint
 > npm run build      # build production assets
 ```

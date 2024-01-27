@@ -30,7 +30,7 @@ class Game {
   }
 
   onPong(event: PongEvent) {
-    console.log("PONG!")
+    console.log("PONG!", event)
   }
 }
 
@@ -65,7 +65,7 @@ function connect(url: string): Promise<Game> {
       const event = JSON.parse(message.data as string) as AnyEvent
       console.log("EVENT", event)
       switch(event.type) {
-        case Event.Pong: return game.onPong(event)
+      case Event.Pong: return game.onPong(event)
       }
     })
   })
