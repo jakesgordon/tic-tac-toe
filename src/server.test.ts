@@ -199,6 +199,11 @@ test("2 players play a game, player1 wins", () => {
 
   lobby.execute(player1, { type: Command.Join, name: JAKE })
   lobby.execute(player2, { type: Command.Join, name: AMY  })
+  lobby.execute(player1, { type: Command.Turn, position: Position.Center   })
+  lobby.execute(player2, { type: Command.Turn, position: Position.TopLeft  })
+  lobby.execute(player1, { type: Command.Turn, position: Position.Left     })
+  lobby.execute(player2, { type: Command.Turn, position: Position.TopRight })
+  lobby.execute(player1, { type: Command.Turn, position: Position.Right    })
 
   expect(client1.events()).toEqual([
     {
@@ -209,6 +214,36 @@ test("2 players play a game, player1 wins", () => {
       type: Event.GameStarted,
       player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
       opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.Center,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      position: Position.TopLeft,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.Left,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      position: Position.TopRight,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      opponent: { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.Right,
     },
   ])
 
@@ -221,6 +256,36 @@ test("2 players play a game, player1 wins", () => {
       type: Event.GameStarted,
       player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
       opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+    },
+    {
+      type: Event.OpponentTookTurn,
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      position: Position.Center,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      position: Position.TopLeft,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      position: Position.Left,
+    },
+    {
+      type: Event.PlayerTookTurn,
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.WaitingTurn },
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.TakingTurn  },
+      position: Position.TopRight,
+    },
+    {
+      type: Event.OpponentTookTurn,
+      opponent: { name: JAKE, piece: Piece.Cross, state: PlayerState.WaitingTurn },
+      player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.TakingTurn  },
+      position: Position.Right,
     },
   ])
 
