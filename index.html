@@ -9,6 +9,36 @@
   <script type="module" src="/src/client.ts"></script>
 </head>
 <body>
-  <button id="ping">Ping</button>
+
+  <!--
+    GAME VIEWPORT
+  -->
+
+  <div id="viewport">
+    <ttt-header id="header"></ttt-header>
+  </div>
+
+  <!--
+    HEADER COMPONENT TEMPLATE
+  -->
+
+  <template id="ttt-header">
+    <form class="header-form">
+      <label>Display Name</label>
+      <input class="header-name-input" type="text" name="display-name" placeholder="E.g. Amy" autofocus>
+      <button class="header-join-button" disabled>
+        Start Game
+      </button>
+    </form>
+
+    <div class="header-details hidden">
+      <h1 class="header-player">
+        Hi
+        <span class="header-player-name"></span>
+      </h1>
+      <h3 class="header-status"></h3>
+    </div>
+  </template>
+
 </body>
 </html>
