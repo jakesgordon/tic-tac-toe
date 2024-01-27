@@ -62,6 +62,7 @@ export class Player {
   won()         { this.state = PlayerState.Won         }
   lost()        { this.state = PlayerState.Lost        }
   tied()        { this.state = PlayerState.Tied        }
+  abandoned()   { this.state = PlayerState.Abandoned   }
 
   toJSON() {
     return {
@@ -152,9 +153,10 @@ export class Lobby {
 
   execute(player: Player, command: AnyCommand) {
     switch(command.type) {
-    case Command.Ping: return this.pong(player)
-    case Command.Join: return this.join(player, command.name)
-    case Command.Turn: return this.turn(player, command.position)
+    case Command.Ping:  return this.pong(player)
+    case Command.Join:  return this.join(player, command.name)
+    case Command.Turn:  return this.turn(player, command.position)
+    case Command.Leave: return this.leave(player)
     }
   }
 
@@ -261,6 +263,19 @@ export class Lobby {
     }
   }
 
+  private leave(player: Player) {
+    const opponent = player.opponent
+    if (opponent) {
+      opponent.abandoned()
+      opponent.send({
+        type: Event.OpponentAbandoned,
+        player: opponent,
+        opponent: player
+      })
+    }
+    this.players.delete(player)
+  }
+
   private findOpponent(player: Player) {
     for (const other of this.players.values()) {
       if ((other.state === PlayerState.WaitingGame) && (other !== player))
@@ -297,7 +312,13 @@ wss.on("connection", (ws: WebSocket) => {
   })
 
   ws.on("close", () => {
-    console.log("TODO: player left the game")
+    try {
+      const command = { type: Command.Leave } as AnyCommand
+      console.log("COMMAND", command)
+      lobby.execute(player, command)
+    } catch (err) {
+      console.error("GAME ERROR", err)
+    }
   })
 
   ws.on("error", (err) => {

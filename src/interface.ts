@@ -38,6 +38,7 @@ export enum PlayerState {
   Won         = "Won",
   Lost        = "Lost",
   Tied        = "Tied",
+  Abandoned   = "Abandoned",
 }
 
 export enum UnexpectedError {
@@ -61,9 +62,10 @@ export interface Player {
 //=================================================================================================
 
 export enum Command {
-  Ping = "Ping",
-  Join = "Join",
-  Turn = "Turn",
+  Ping  = "Ping",
+  Join  = "Join",
+  Turn  = "Turn",
+  Leave = "Leave",
 }
 
 interface PingCommand {
@@ -80,10 +82,15 @@ interface TurnCommand {
   position: Position;
 }
 
+interface LeaveCommand {
+  type: Command.Leave;
+}
+
 export type AnyCommand =
   | PingCommand
   | JoinCommand
   | TurnCommand
+  | LeaveCommand
 
 //=================================================================================================
 // EVENTS
@@ -95,6 +102,7 @@ export enum Event {
   GameStarted       = "GameStarted",
   PlayerTookTurn    = "PlayerTookTurn",
   OpponentTookTurn  = "OpponentTookTurn",
+  OpponentAbandoned = "OpponentAbandoned",
   PlayerWon         = "PlayerWon",
   PlayerLost        = "PlayerLost",
   PlayerTied        = "PlayerTied",
@@ -130,6 +138,12 @@ export interface OpponentTookTurnEvent {
   position: Position;
 }
 
+export interface OpponentAbandonedEvent {
+  type:     Event.OpponentAbandoned;
+  player:   Player;
+  opponent: Player;
+}
+
 export interface PlayerWonEvent {
   type: Event.PlayerWon;
   player: Player;
@@ -161,6 +175,7 @@ export type AnyEvent =
   | GameStartedEvent
   | PlayerTookTurnEvent
   | OpponentTookTurnEvent
+  | OpponentAbandonedEvent
   | PlayerWonEvent
   | PlayerLostEvent
   | PlayerTiedEvent
