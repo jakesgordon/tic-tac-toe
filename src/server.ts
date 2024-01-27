@@ -1,4 +1,5 @@
 import { WebSocket, WebSocketServer } from "ws"
+import { assert } from "./assert"
 
 import {
   Position,
@@ -166,6 +167,7 @@ export class Lobby {
     case Command.Leave:  return this.leave(player)
     case Command.Replay: return this.replay(player)
     }
+    assert.unreachable(command)
   }
 
   private pong(player: Player) {
