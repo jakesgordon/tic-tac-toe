@@ -40,6 +40,13 @@ export enum PlayerState {
   Tied        = "Tied",
 }
 
+export enum UnexpectedError {
+  AlreadyJoined = "The player has already joined the lobby",
+  PositionTaken = "The position was already taken",
+  OutOfTurn     = "The player played out of turn",
+  NotInGame     = "The player is not in a game yet",
+}
+
 //=================================================================================================
 // INTERFACES
 //=================================================================================================
@@ -91,6 +98,7 @@ export enum Event {
   PlayerWon         = "PlayerWon",
   PlayerLost        = "PlayerLost",
   PlayerTied        = "PlayerTied",
+  UnexpectedError   = "UnexpectedError",
 }
 
 export interface PongEvent {
@@ -142,6 +150,11 @@ export interface PlayerTiedEvent {
   opponent: Player;
 }
 
+export interface UnexpectedErrorEvent {
+  type: Event.UnexpectedError;
+  error: UnexpectedError;
+}
+
 export type AnyEvent =
   | PongEvent
   | PlayerReadyEvent
@@ -151,5 +164,6 @@ export type AnyEvent =
   | PlayerWonEvent
   | PlayerLostEvent
   | PlayerTiedEvent
+  | UnexpectedErrorEvent
 
 //-------------------------------------------------------------------------------------------------

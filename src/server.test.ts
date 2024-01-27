@@ -9,6 +9,7 @@ import {
   Event,
   AnyEvent,
   Command,
+  UnexpectedError,
 } from "./interface"
 
 //-------------------------------------------------------------------------------------------------
@@ -586,6 +587,95 @@ test("2 players play a game, ends in a tie", () => {
       player:   { name: AMY,  piece: Piece.Dot,   state: PlayerState.Tied },
     }
   ])
+})
+
+//-------------------------------------------------------------------------------------------------
+
+test("unexpected - player took turn in position that was already occupied", () => {
+
+  const { lobby, client1, client2, player1, player2 } = setup()
+
+  lobby.execute(player1, { type: Command.Join, name: JAKE })
+  lobby.execute(player2, { type: Command.Join, name: AMY  })
+  lobby.execute(player1, { type: Command.Turn, position: Position.Center })
+
+  client1.flush()
+  client2.flush()
+
+  lobby.execute(player2, { type: Command.Turn, position: Position.Center })
+
+  expect(client1.events()).toEqual([])
+  expect(client2.events()).toEqual([
+    {
+      type: Event.UnexpectedError,
+      error: UnexpectedError.PositionTaken,
+    }
+  ])
+})
+
+//-------------------------------------------------------------------------------------------------
+
+test("unexpected - player played out of turn", () => {
+
+  const { lobby, client1, client2, player1, player2 } = setup()
+
+  lobby.execute(player1, { type: Command.Join, name: JAKE })
+  lobby.execute(player2, { type: Command.Join, name: AMY  })
+
+  client1.flush()
+  client2.flush()
+
+  lobby.execute(player2, { type: Command.Turn, position: Position.Center })
+
+  expect(client1.events()).toEqual([])
+  expect(client2.events()).toEqual([
+    {
+      type: Event.UnexpectedError,
+      error: UnexpectedError.OutOfTurn,
+    }
+  ])
+})
+
+//-------------------------------------------------------------------------------------------------
+
+test("unexpected - player took turn before starting game", () => {
+
+  const { lobby, client, player } = setup()
+
+  lobby.execute(player, { type: Command.Join, name: JAKE })
+
+  client.flush()
+
+  lobby.execute(player, { type: Command.Turn, position: Position.Center })
+
+  expect(client.events()).toEqual([
+    {
+      type: Event.UnexpectedError,
+      error: UnexpectedError.NotInGame,
+    }
+  ])
+})
+
+//-------------------------------------------------------------------------------------------------
+
+test("unexpected - player tried to join lobby twice", () => {
+
+  const { lobby, client, player } = setup()
+
+  lobby.execute(player, { type: Command.Join, name: JAKE })
+
+  client.flush()
+
+  lobby.execute(player, { type: Command.Join, name: JAKE })
+
+  expect(client.events()).toEqual([
+    {
+      type: Event.UnexpectedError,
+      error: UnexpectedError.AlreadyJoined,
+    }
+  ])
+
+  expect(lobby.numPlayers).toBe(1)
 })
 
 //-------------------------------------------------------------------------------------------------
