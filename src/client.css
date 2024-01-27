@@ -1,0 +1,30 @@
+@import "/normalize.css";
+
+/**************************************************************************************************/
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --text-dark:  #444444;
+  --text-light: #FEFEFE;
+}
+
+/**************************************************************************************************
+ BASE STYLES
+ **************************************************************************************************/
+
+body {
+  color:           var(--text-dark);
+  min-height:      100vh;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+}
+
+/**************************************************************************************************/
