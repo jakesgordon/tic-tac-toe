@@ -1,9 +1,10 @@
 import topbar from "topbar"
 import { assert } from "./assert"
 import { Header, JoinEvent } from "./client/header"
-import { Board, Dot, Cross } from "./client/board"
+import { Board, Dot, Cross, TurnEvent } from "./client/board"
 
 import {
+  Position,
   PlayerState,
   Command,
   AnyCommand,
@@ -50,6 +51,7 @@ class Game {
     this.header = document.getElementById("header") as Header
     this.board  = document.getElementById("board")  as Board
     this.header.addEventListener("join", (ev) => this.onJoin((ev as JoinEvent).detail.name))
+    this.board.addEventListener("turn", (ev) => this.onTurn((ev as TurnEvent).detail.position))
   }
 
   onPong(event: PongEvent) {
@@ -70,12 +72,20 @@ class Game {
     this.board.start(player.piece, player.state === PlayerState.TakingTurn)
   }
 
-  onPlayerTookTurn(event: PlayerTookTurnEvent) {
-    console.log("TODO", event)
+  onTurn(position: Position) {
+    this.send({ type: Command.Turn, position })
   }
 
-  onOpponentTookTurn(event: OpponentTookTurnEvent) {
-    console.log("TODO", event)
+  onPlayerTookTurn({ player, position }: PlayerTookTurnEvent) {
+    assert.isPiece(player.piece)
+    this.board.set(position, player.piece, false)
+    this.header.update(player)
+  }
+
+  onOpponentTookTurn({ player, opponent, position }: OpponentTookTurnEvent) {
+    assert.isPiece(opponent.piece)
+    this.board.set(position, opponent.piece, true)
+    this.header.update(player)
   }
 
   onOpponentAbandoned(event: OpponentAbandonedEvent) {
