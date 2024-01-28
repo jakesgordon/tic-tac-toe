@@ -92,16 +92,20 @@ class Game {
     console.log("TODO", event)
   }
 
-  onPlayerWon(event: PlayerWonEvent) {
-    console.log("TODO", event)
+  onPlayerWon({ player, line }: PlayerWonEvent) {
+    assert.isPiece(player.piece)
+    this.board.win(line, player.piece)
+    this.header.end(player)
   }
 
-  onPlayerLost(event: PlayerLostEvent) {
-    console.log("TODO", event)
+  onPlayerLost({ player, opponent, line }: PlayerLostEvent) {
+    assert.isPiece(opponent.piece)
+    this.board.win(line, opponent.piece)
+    this.header.end(player)
   }
 
-  onPlayerTied(event: PlayerTiedEvent) {
-    console.log("TODO", event)
+  onPlayerTied({ player }: PlayerTiedEvent) {
+    this.header.end(player)
   }
 
   onError(error: UnexpectedError) {

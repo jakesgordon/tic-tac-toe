@@ -1,4 +1,4 @@
-import { Piece, Position } from "../interface"
+import { Piece, Position, WinningLine } from "../interface"
 
 const MY_TURN = "my-turn"
 
@@ -7,6 +7,7 @@ export class TurnEvent extends CustomEvent<{ position: Position }> {}
 export class Board extends HTMLElement {
   board: HTMLElement
   cells: Record<Position, HTMLElement>
+  winningLines: Record<WinningLine, HTMLElement>
 
   constructor() {
     super()
@@ -24,6 +25,17 @@ export class Board extends HTMLElement {
       [Position.BottomLeft]:  this.querySelector(".board-cell.bottom-left")  as HTMLElement,
       [Position.Bottom]:      this.querySelector(".board-cell.bottom")       as HTMLElement,
       [Position.BottomRight]: this.querySelector(".board-cell.bottom-right") as HTMLElement,
+    }
+
+    this.winningLines = {
+      [WinningLine.TopRow]:       this.querySelector(".winning-line.top-row")       as HTMLElement,
+      [WinningLine.MiddleRow]:    this.querySelector(".winning-line.middle-row")    as HTMLElement,
+      [WinningLine.BottomRow]:    this.querySelector(".winning-line.bottom-row")    as HTMLElement,
+      [WinningLine.LeftColumn]:   this.querySelector(".winning-line.left-column")   as HTMLElement,
+      [WinningLine.CenterColumn]: this.querySelector(".winning-line.center-column") as HTMLElement,
+      [WinningLine.RightColumn]:  this.querySelector(".winning-line.right-column")  as HTMLElement,
+      [WinningLine.DownDiagonal]: this.querySelector(".winning-line.down-diagonal") as HTMLElement,
+      [WinningLine.UpDiagonal]:   this.querySelector(".winning-line.up-diagonal")   as HTMLElement,
     }
 
     for (const [position, cell] of Object.entries(this.cells)) {
@@ -53,6 +65,11 @@ export class Board extends HTMLElement {
       this.board.classList.add(MY_TURN)
     else
       this.board.classList.remove(MY_TURN)
+  }
+
+  win(line: WinningLine, piece: Piece) {
+    this.winningLines[line].classList.add(piece)
+    this.board.classList.remove(MY_TURN)
   }
 }
 
