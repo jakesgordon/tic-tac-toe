@@ -3,7 +3,7 @@
 This repository includes an implementation of a simple Tic Tac Toe game with multiplayer support
 provided by a Node.js websocket server.
 
-![screenshot](mobile.png)
+![screenshot](./doc/mobile.png)
 
 ## Usage
 
