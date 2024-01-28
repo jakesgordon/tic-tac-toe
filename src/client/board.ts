@@ -2,6 +2,8 @@ import { Piece, Position } from "../interface"
 
 const MY_TURN = "my-turn"
 
+export class TurnEvent extends CustomEvent<{ position: Position }> {}
+
 export class Board extends HTMLElement {
   board: HTMLElement
   cells: Record<Position, HTMLElement>
@@ -23,10 +25,30 @@ export class Board extends HTMLElement {
       [Position.Bottom]:      this.querySelector(".board-cell.bottom")       as HTMLElement,
       [Position.BottomRight]: this.querySelector(".board-cell.bottom-right") as HTMLElement,
     }
+
+    for (const [position, cell] of Object.entries(this.cells)) {
+      cell.addEventListener("click", () => {
+        if (this.board.classList.contains(MY_TURN) && !cell.classList.contains(Piece.Dot) && !cell.classList.contains(Piece.Cross)) {
+          this.dispatchEvent(new TurnEvent("turn", {
+            detail: {
+              position: position as Position,
+            },
+          }))
+        }
+      })
+    }
   }
 
   start(piece: Piece, myTurn: boolean) {
     this.board.classList.add(piece)
+    if (myTurn)
+      this.board.classList.add(MY_TURN)
+    else
+      this.board.classList.remove(MY_TURN)
+  }
+
+  set(position: Position, piece: Piece, myTurn: boolean) {
+    this.cells[position].classList.add(piece)
     if (myTurn)
       this.board.classList.add(MY_TURN)
     else
