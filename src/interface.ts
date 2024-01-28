@@ -55,6 +55,7 @@ export enum UnexpectedError {
 export interface Player {
   state: PlayerState;
   name: string;
+  piece?: Piece;
 }
 
 //=================================================================================================
