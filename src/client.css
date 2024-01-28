@@ -161,6 +161,10 @@ button:focus {
   align-self: flex-end;
 }
 
+.header-replay-button {
+  align-self: flex-end;
+}
+
 .header-details {
   display: flex;
   flex-direction: column;

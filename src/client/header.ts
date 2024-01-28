@@ -2,7 +2,8 @@ import { assert } from "../assert"
 import { Piece, Player, PlayerState } from "../interface"
 import { show, hide } from "../client"
 
-export class JoinEvent extends CustomEvent<{ name: string }> {}
+export class JoinEvent   extends CustomEvent<{ name: string }> {}
+export class ReplayEvent extends CustomEvent<void> {}
 
 export class Header extends HTMLElement {
 
@@ -20,11 +21,13 @@ export class Header extends HTMLElement {
   connectedCallback() {
     this.form.addEventListener("submit", this)
     this.nameInput.addEventListener("input", this)
+    this.replayButton.addEventListener("click", this)
   }
 
   disconnectedCallback() {
     this.form.removeEventListener("submit", this)
     this.nameInput.removeEventListener("input", this)
+    this.replayButton.removeEventListener("click", this)
   }
 
   get nameInput()     { return this.querySelector(".header-name-input") as HTMLInputElement }
@@ -48,12 +51,16 @@ export class Header extends HTMLElement {
       event.preventDefault()
       this.onJoin()
       break
+    case "click":
+      this.onReplay()
+      break
     }
   }
 
   reset(player: Player) {
     hide(this.form)
     hide(this.opponent)
+    hide(this.replayButton)
     show(this.details)
     this.playerName.innerText = player.name
     this.update(player)
@@ -75,6 +82,7 @@ export class Header extends HTMLElement {
 
   end(player: Player) {
     this.update(player)
+    show(this.replayButton)
   }
 
   private statusLabel(player: Player) {
@@ -99,6 +107,11 @@ export class Header extends HTMLElement {
         name: this.nameInput.value,
       },
     }))
+  }
+
+  onReplay() {
+    hide(this.replayButton)
+    this.dispatchEvent(new ReplayEvent("replay"))
   }
 
 }
