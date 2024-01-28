@@ -10,7 +10,6 @@ import {
   AnyCommand,
   Event,
   AnyEvent,
-  PongEvent,
   PlayerReadyEvent,
   GameStartedEvent,
   PlayerTookTurnEvent,
@@ -53,10 +52,6 @@ class Game {
     this.header.addEventListener("join", (ev) => this.onJoin((ev as JoinEvent).detail.name))
     this.header.addEventListener("replay", () => this.onReplay())
     this.board.addEventListener("turn", (ev) => this.onTurn((ev as TurnEvent).detail.position))
-  }
-
-  onPong(event: PongEvent) {
-    console.log(event)
   }
 
   onJoin(name: string) {
@@ -166,7 +161,6 @@ function connect(url: string): Promise<Game> {
       const event = JSON.parse(message.data as string) as AnyEvent
       console.log("EVENT", event)
       switch(event.type) {
-      case Event.Pong:              return game.onPong(event)
       case Event.PlayerReady:       return game.onPlayerReady(event)
       case Event.GameStarted:       return game.onGameStarted(event)
       case Event.PlayerTookTurn:    return game.onPlayerTookTurn(event)

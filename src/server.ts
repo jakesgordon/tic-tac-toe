@@ -161,19 +161,12 @@ export class Lobby {
 
   execute(player: Player, command: AnyCommand) {
     switch(command.type) {
-    case Command.Ping:   return this.pong(player)
     case Command.Join:   return this.join(player, command.name)
     case Command.Turn:   return this.turn(player, command.position)
     case Command.Leave:  return this.leave(player)
     case Command.Replay: return this.replay(player)
     }
     assert.unreachable(command)
-  }
-
-  private pong(player: Player) {
-    player.send({
-      type: Event.Pong,
-    })
   }
 
   private join(player: Player, name: string) {
