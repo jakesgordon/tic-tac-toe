@@ -176,6 +176,7 @@ function connect(url: string): Promise<Game> {
   })
 }
 
-await connect(`ws://${location.host}/ws`)
+const protocol = location.protocol === "https:" ? "wss" : "ws"
+await connect(`${protocol}://${location.host}/ws`)
 
 //-------------------------------------------------------------------------------------------------
