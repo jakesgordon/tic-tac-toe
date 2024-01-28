@@ -4,6 +4,7 @@ import { Header, JoinEvent } from "./client/header"
 import { Board, Dot, Cross } from "./client/board"
 
 import {
+  PlayerState,
   Command,
   AnyCommand,
   Event,
@@ -63,8 +64,10 @@ class Game {
     this.header.reset(player)
   }
 
-  onGameStarted(event: GameStartedEvent) {
-    console.log("TODO", event)
+  onGameStarted({ player, opponent }: GameStartedEvent) {
+    assert.isPiece(player.piece)
+    this.header.start(player, opponent)
+    this.board.start(player.piece, player.state === PlayerState.TakingTurn)
   }
 
   onPlayerTookTurn(event: PlayerTookTurnEvent) {

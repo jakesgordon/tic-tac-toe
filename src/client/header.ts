@@ -1,5 +1,5 @@
 import { assert } from "../assert"
-import { Player, PlayerState } from "../interface"
+import { Piece, Player, PlayerState } from "../interface"
 import { show, hide } from "../client"
 
 export class JoinEvent extends CustomEvent<{ name: string }> {}
@@ -27,10 +27,17 @@ export class Header extends HTMLElement {
     this.nameInput.removeEventListener("input", this)
   }
 
-  get nameInput()  { return this.querySelector(".header-name-input") as HTMLInputElement }
-  get joinButton() { return this.querySelector(".header-join-button") as HTMLButtonElement }
-  get status()     { return this.querySelector(".header-status") as HTMLElement  }
-  get playerName() { return this.querySelector(".header-player-name") as HTMLElement }
+  get nameInput()     { return this.querySelector(".header-name-input") as HTMLInputElement }
+  get joinButton()    { return this.querySelector(".header-join-button") as HTMLButtonElement }
+  get status()        { return this.querySelector(".header-status") as HTMLElement  }
+  get opponent()      { return this.querySelector(".header-opponent") as HTMLElement }
+  get playerName()    { return this.querySelector(".header-player-name") as HTMLElement }
+  get playerDot()     { return this.querySelector(".header-player-dot") as HTMLElement }
+  get playerCross()   { return this.querySelector(".header-player-cross") as HTMLElement }
+  get opponentName()  { return this.querySelector(".header-opponent-name") as HTMLElement }
+  get opponentDot()   { return this.querySelector(".header-opponent-dot") as HTMLElement }
+  get opponentCross() { return this.querySelector(".header-opponent-cross") as HTMLElement }
+  get replayButton()  { return this.querySelector(".header-replay-button") as HTMLButtonElement }
 
   handleEvent(event: Event) {
     switch (event.type) {
@@ -46,8 +53,19 @@ export class Header extends HTMLElement {
 
   reset(player: Player) {
     hide(this.form)
+    hide(this.opponent)
     show(this.details)
     this.playerName.innerText = player.name
+    this.update(player)
+  }
+
+  start(player: Player, opponent: Player) {
+    show(this.opponent)
+    show(this.playerCross, player.piece === Piece.Cross)
+    show(this.playerDot, player.piece === Piece.Dot)
+    show(this.opponentCross, opponent.piece === Piece.Cross)
+    show(this.opponentDot, opponent.piece === Piece.Dot)
+    this.opponentName.innerText = opponent.name
     this.update(player)
   }
 

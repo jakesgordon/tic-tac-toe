@@ -167,17 +167,28 @@ button:focus {
   gap: var(--spacing-1);
 }
 
-.header-player {
+.header-player,
+.header-opponent {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
 }
 
-.header-player-name {
+.header-player-name,
+.header-opponent-name {
   font-weight: var(--font-bold);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.header-player-dot,
+.header-player-cross,
+.header-opponent-dot,
+.header-opponent-cross {
+  width: var(--spacing-4);
+  margin-top: var(--spacing-1);
+  flex-shrink: 0;
 }
 
 /**************************************************************************************************
@@ -209,6 +220,21 @@ button:focus {
 .board-cell       ttt-cross { display: none; width: 60%; margin-top: 5px; }
 .board-cell.dot   ttt-dot   { display: block; }
 .board-cell.cross ttt-cross { display: block; }
+
+.board.cross.my-turn .board-cell:not(.dot):not(.cross):hover {
+  background-color: color-mix(in srgb, var(--cross-color) 10%, white);
+  cursor: pointer;
+}
+
+.board.dot.my-turn .board-cell:not(.dot):not(.cross):hover {
+  background-color: color-mix(in srgb, var(--dot-color) 10%, white);
+  cursor: pointer;
+}
+
+.board.my-turn .board-cell.dot:hover,
+.board.my-turn .board-cell.cross:hover {
+  cursor: not-allowed;
+}
 
 /**************************************************************************************************
  UTILITIES

@@ -1,4 +1,6 @@
-import { Position } from "../interface"
+import { Piece, Position } from "../interface"
+
+const MY_TURN = "my-turn"
 
 export class Board extends HTMLElement {
   board: HTMLElement
@@ -21,6 +23,14 @@ export class Board extends HTMLElement {
       [Position.Bottom]:      this.querySelector(".board-cell.bottom")       as HTMLElement,
       [Position.BottomRight]: this.querySelector(".board-cell.bottom-right") as HTMLElement,
     }
+  }
+
+  start(piece: Piece, myTurn: boolean) {
+    this.board.classList.add(piece)
+    if (myTurn)
+      this.board.classList.add(MY_TURN)
+    else
+      this.board.classList.remove(MY_TURN)
   }
 }
 
