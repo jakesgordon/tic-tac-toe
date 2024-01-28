@@ -1,5 +1,8 @@
 import { test, expect } from "vitest"
-import { Player, Board, Lobby } from "./server"
+
+import { Player } from "./server/player"
+import { Board  } from "./server/board"
+import { Lobby  } from "./server/lobby"
 
 import {
   Piece,
