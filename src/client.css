@@ -46,7 +46,10 @@
  CUSTOM ELEMENT ROOT STYLES
  **************************************************************************************************/
 
+ttt-board  { display: block; }
 ttt-header { display: block; }
+ttt-dot    { display: inline-block; fill: var(--dot-color);   }
+ttt-cross  { display: inline-block; fill: var(--cross-color); }
 
 /**************************************************************************************************
  BASE STYLES
@@ -176,6 +179,36 @@ button:focus {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/**************************************************************************************************
+ BOARD COMPONENT STYLES
+ **************************************************************************************************/
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--board-gap);
+  position: relative;
+}
+
+.board-row {
+  display: flex;
+  gap: var(--board-gap);
+}
+
+.board-cell {
+  flex-grow: 1;
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--border-color);
+}
+
+.board-cell       ttt-dot   { display: none; width: 60%; margin-top: 5px; }
+.board-cell       ttt-cross { display: none; width: 60%; margin-top: 5px; }
+.board-cell.dot   ttt-dot   { display: block; }
+.board-cell.cross ttt-cross { display: block; }
 
 /**************************************************************************************************
  UTILITIES
