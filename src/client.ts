@@ -1,6 +1,7 @@
 import topbar from "topbar"
 import { assert } from "./assert"
 import { Header, JoinEvent } from "./client/header"
+import { Board, Dot, Cross } from "./client/board"
 
 import {
   Command,
@@ -23,7 +24,10 @@ import {
 // CUSTOM ELEMENTS
 //=================================================================================================
 
+customElements.define("ttt-dot",    Dot)
+customElements.define("ttt-cross",  Cross)
 customElements.define("ttt-header", Header)
+customElements.define("ttt-board",  Board)
 
 //=================================================================================================
 // TYPES
@@ -38,10 +42,12 @@ type Sender = (command: AnyCommand) => void
 class Game {
   private send:   Sender
   private header: Header
+  private board:  Board
 
   constructor(send: Sender) {
     this.send   = send
     this.header = document.getElementById("header") as Header
+    this.board  = document.getElementById("board")  as Board
     this.header.addEventListener("join", (ev) => this.onJoin((ev as JoinEvent).detail.name))
   }
 
