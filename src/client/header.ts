@@ -73,6 +73,10 @@ export class Header extends HTMLElement {
     this.status.innerText = this.statusLabel(player)
   }
 
+  end(player: Player) {
+    this.update(player)
+  }
+
   private statusLabel(player: Player) {
     switch (player.state) {
     case PlayerState.Joining:     return "Joining game..."

@@ -236,6 +236,74 @@ button:focus {
   cursor: not-allowed;
 }
 
+.winning-line {
+  display: none;
+  position: absolute;
+  border-radius: 1000px;
+  opacity: 50%;
+}
+
+.winning-line.cross { display: block; background-color: var(--cross-color);  }
+.winning-line.dot   { display: block; background-color: var(--dot-color);    }
+
+.winning-line.top-row {
+  left: 5%;
+  right: 5%;
+  top: calc(((100% - (2 * var(--board-gap))) * 1/6) - (var(--board-win-thickness)/2));
+  height: var(--board-win-thickness);
+}
+
+.winning-line.middle-row {
+  left: 5%;
+  right: 5%;
+  top: calc(50% - (var(--board-win-thickness)/2));
+  height: var(--board-win-thickness);
+}
+
+.winning-line.bottom-row {
+  left: 5%;
+  right: 5%;
+  bottom: calc(((100% - (2 * var(--board-gap))) * 1/6) - (var(--board-win-thickness)/2));
+  height: var(--board-win-thickness);
+}
+
+.winning-line.left-column {
+  top: 5%;
+  bottom: 5%;
+  left: calc(((100% - (2 * var(--board-gap))) * 1/6) - (var(--board-win-thickness)/2));
+  width: var(--board-win-thickness);
+}
+
+.winning-line.center-column {
+  top: 5%;
+  bottom: 5%;
+  left: calc(50% - (var(--board-win-thickness)/2));
+  width: var(--board-win-thickness);
+}
+
+.winning-line.right-column {
+  top: 5%;
+  bottom: 5%;
+  right: calc(((100% - (2 * var(--board-gap))) * 1/6) - (var(--board-win-thickness)/2));
+  width: var(--board-win-thickness);
+}
+
+.winning-line.down-diagonal {
+  left: calc(((90% * sqrt(2)) - 100%) * -1/2);
+  width: calc(90% * sqrt(2));
+  top: calc(50% - (var(--board-win-thickness)/2));
+  height: var(--board-win-thickness);
+  transform: rotate(45deg);
+}
+
+.winning-line.up-diagonal {
+  left: calc(((90% * sqrt(2)) - 100%) * -1/2);
+  width: calc(90% * sqrt(2));
+  top: calc(50% - (var(--board-win-thickness)/2));
+  height: var(--board-win-thickness);
+  transform: rotate(-45deg);
+}
+
 /**************************************************************************************************
  UTILITIES
  **************************************************************************************************/
