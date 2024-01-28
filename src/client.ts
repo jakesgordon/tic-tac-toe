@@ -88,8 +88,9 @@ class Game {
     this.header.update(player)
   }
 
-  onOpponentAbandoned(event: OpponentAbandonedEvent) {
-    console.log("TODO", event)
+  onOpponentAbandoned({ player }: OpponentAbandonedEvent) {
+    this.header.update(player)
+    this.board.abandon()
   }
 
   onPlayerWon({ player, line }: PlayerWonEvent) {

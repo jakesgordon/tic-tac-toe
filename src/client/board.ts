@@ -71,6 +71,10 @@ export class Board extends HTMLElement {
     this.winningLines[line].classList.add(piece)
     this.board.classList.remove(MY_TURN)
   }
+
+  abandon() {
+    this.board.classList.remove(MY_TURN)
+  }
 }
 
 //-------------------------------------------------------------------------------------------------
