@@ -301,9 +301,10 @@ export class Lobby {
 // WEB SOCKET SERVER
 //=================================================================================================
 
-const port  = parseInt(process.env.SERVER_PORT ?? process.env.PORT ?? "3001")
-const wss   = new WebSocketServer({ port })
-const lobby = new Lobby()
+const clientPort = parseInt(process.env.PORT ?? process.env.CLIENT_PORT ?? "3000")
+const serverPort = parseInt(process.env.SERVER_PORT ?? `${clientPort+1}`)
+const wss        = new WebSocketServer({ port: serverPort })
+const lobby      = new Lobby()
 
 wss.on("connection", (ws: WebSocket) => {
 
@@ -339,7 +340,7 @@ wss.on("connection", (ws: WebSocket) => {
   })
 })
 
-console.log("LISTENING ON PORT: ", port)
+console.log("LISTENING ON PORT: ", serverPort)
 
 //-------------------------------------------------------------------------------------------------
 
