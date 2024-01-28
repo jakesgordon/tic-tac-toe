@@ -1,13 +1,13 @@
 # Tic Tac Toe - Node
 
 This repository includes an implementation of a simple Tic Tac Toe game with multiplayer support
-provided by a Node.js websocket server.
+provided by a Node.js websocket server. You can play the game at [ttt.jakesgordon.com](https://ttt.jakesgordon.com),
+but of course you'll need to wait for a second player to join. You can always play against
+yourself if you use 2 browsers or 2 separate devices.
 
-You can play the game at [ttt.jakesgordon.com](https://ttt.jakesgordon.com), but of course you'll
-need to wait for a second player to join. You can always play against yourself if you use 2
-browsers or 2 separate devices.
+> NOTE: I may - or may not - still be hosting this game by the time you read this, so YMMV.
 
-> NOTE: I may or may not still be hosting this game by the time you read this, so YMMV.
+![screenshot](./doc/mobile.png)
 
 ## Usage
 
@@ -20,8 +20,25 @@ browsers or 2 separate devices.
 > npm run build      # build production assets
 ```
 
-![screenshot](./doc/mobile.png)
+## Repository Structure
 
+The project has the following dependencies:
+
+  * [Vite](https://vitejs.dev/) for the development server
+  * [Typescript](https://www.typescriptlang.org/) as the development language
+  * [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) and [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS) - no fancy frameworks needed :-)
+
+```console
+    └── index.html          - page layout
+    └── public              - static assets
+    └── src
+        └── interface.ts    - abstract types used by both client and server
+        └── server.ts       - THE WEBSOCKET SERVER
+        └── client.ts       - THE WEBSOCKET CLIENT
+        └── client
+            └── header.ts   - a webcomponent
+            └── board.ts    - a webcomponent
+```
 
 ## Overview
 
@@ -37,28 +54,6 @@ There are 3  main components
     sending events back.
   * [interface.ts](./src/interface.ts) contains the enums, commands, and event types shared
     between the [client](./src/client.ts) and the [server](./src/server.ts)
-
-## Repository Structure
-
-The project uses the following dependencies:
-
-  * [Vite](https://vitejs.dev/) for the development server
-  * [Typescript](https://www.typescriptlang.org/) as the development language
-  * [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) and [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS) - no fancy frameworks needed :-)
-
-The repository includes:
-
-```console
-    └── index.html          - page layout
-    └── public              - static assets
-    └── src
-        └── interface.ts    - abstract types used by both client and server
-        └── server.ts       - THE WEBSOCKET SERVER
-        └── client.ts       - THE WEBSOCKET CLIENT
-        └── client
-            └── header.ts   - a webcomponent
-            └── board.ts    - a webcomponent
-```
 
 ## Interface - Enums
 
