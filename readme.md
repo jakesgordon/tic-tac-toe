@@ -3,6 +3,12 @@
 This repository includes an implementation of a simple Tic Tac Toe game with multiplayer support
 provided by a Node.js websocket server.
 
+You can play the game at [ttt.jakesgordon.com](https://ttt.jakesgordon.com), but of course you'll
+need to wait for a second player to join. You can always play against yourself if you use 2
+browsers or 2 separate devices.
+
+> NOTE: I may or may not still be hosting this game by the time you read this, so YMMV.
+
 ## Usage
 
 ```bash
@@ -14,12 +20,36 @@ provided by a Node.js websocket server.
 > npm run build      # build production assets
 ```
 
+![screenshot](./doc/mobile.png)
+
+
+## Overview
+
+There are 3  main components
+
+  * [client.ts](./src/client.ts) is the client side entry point that constructs a websocket
+    and connects to the server. It has no real game logic and simply sends commands
+    to the server in response to user actions and then updates the UX in response to
+    events it receives back from the server.
+  * [server.ts](./src/server.ts) is the websocket server that does all the heavy lifting and manages
+    a `Lobby` of `Players` and the `Game` that they are currently playing. It responds
+    to commands it receives from the websocket clients by updating game state and
+    sending events back.
+  * [interface.ts](./src/interface.ts) contains the enums, commands, and event types shared
+    between the [client](./src/client.ts) and the [server](./src/server.ts)
+
 ## Repository Structure
+
+The project uses the following dependencies:
+
+  * [Vite](https://vitejs.dev/) for the development server
+  * [Typescript](https://www.typescriptlang.org/) as the development language
+  * [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) and [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS) - no fancy frameworks needed :-)
 
 The repository includes:
 
 ```console
-    └── index.html          - page layout and templates
+    └── index.html          - page layout
     └── public              - static assets
     └── src
         └── interface.ts    - abstract types used by both client and server
@@ -30,26 +60,11 @@ The repository includes:
             └── board.ts    - a webcomponent
 ```
 
-![screenshot](./doc/mobile.png)
+## Interface - Enums
 
-
-## Overview
-
-There are 2 main components
-
-  * **client** is the client side entry point that constructs a websocket
-    and connects to the server. It has no real game logic and simply sends commands
-    to the server in response to user actions and then updates the UX in response to
-    events it receives back from the server.
-  * **server** is the websocket server that does all the heavy lifting and manages
-    a `Lobby` of `Players` and the `Game` that they are currently playing. It responds
-    to commands it receives from the websocket clients by updating game state and
-    sending events back.
-
-## Enums
-
-The **client** and **server** share some simple enums and interfaces that help define some of the
-key concepts in a Tic-Tac-Toe game, and can be found in the `interface` module:
+The [client](./src/client.ts) and [server](./src/server.ts) share some simple enums and interfaces
+that help define some of the key concepts in a Tic-Tac-Toe game, and can be found in the
+[interface](./src/interface.ts) module:
 
 ```typescript
 export enum Piece {
@@ -109,11 +124,11 @@ export interface Player {
 }
 ```
 
-## Commands
+## Interface - Commands
 
-The `client` and `server` also share some important types that enable our event driven
-architecture where a `Command` can be sent to the server and an `Event` can be sent back
-to the client. We use a pattern called a [discriminated union](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions)
+The [client](./src/client.ts) and [server](./src/server.ts) also share some important types that
+enable our event driven architecture where a `Command` can be sent to the server and an `Event`
+can be sent back to the client. We use a pattern called a [discriminated union](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions)
 to represent all of the possible commands and their arguments.
 
 ```typescript
@@ -149,7 +164,8 @@ export type AnyCommand =
   | ReplayCommand
 ```
 
-This pattern enables our **server** to easily switch based on the command and perform different actions:
+This pattern enables our [server](./src/server.ts) to easily switch based on the command and
+perform different actions, e.g:
 
 ```typescript
 execute(command: AnyCommand) {
@@ -162,7 +178,7 @@ execute(command: AnyCommand) {
 }
 ```
 
-## Events
+## Interface - Events
 
 Similarly, we use the same [discriminated union](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions)
 pattern to represent all of the possible events and their arguments.
@@ -248,8 +264,8 @@ export type AnyEvent =
   | UnexpectedErrorEvent
 ```
 
-This pattern enables our **client** to easily switch based on the event in order
-to handle it appropriately.
+Again, this pattern enables our [client](./src/client.ts) to easily switch based on the event
+in order to handle it appropriately, e.g:
 
 ```typescript
 handle(event: AnyEvent) {
@@ -269,7 +285,18 @@ handle(event: AnyEvent) {
 
 ## The Client
 
-_coming soon_
+The [client](./src/client.ts) is fairly simple and naive. It responds to events from the user
+by sending commands to the server, and then it responds to events sent back from the server by
+updating the UX for the user.
+
+It is broken up into 2 web components, the [header](./src/client/header.ts) renders the current
+game information to the user, while the [board](./src/client/board.ts) renders the tic-tac-toe
+board itself. Both are fairly simple web components that use a `<template>` that can be found
+in the main [index.html](./index.html) file, and CSS styling declared in
+[client.css](./src/client.css). The UX is simple and there is no need for shadow DOM encapsulation
+or any reactive frameworks. They simply update various fixed elements of the UX
+using traditional DOM manipulation and the strategic use of css classNames to show or
+hide elements.
 
 ## The Server
 
