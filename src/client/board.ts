@@ -75,6 +75,20 @@ export class Board extends HTMLElement {
   abandon() {
     this.board.classList.remove(MY_TURN)
   }
+
+  reset() {
+    this.board.classList.remove(Piece.Dot)
+    this.board.classList.remove(Piece.Cross)
+    this.board.classList.remove(MY_TURN)
+    for (const position of Object.values(Position)) {
+      this.cells[position].classList.remove(Piece.Dot)
+      this.cells[position].classList.remove(Piece.Cross)
+    }
+    for (const line of Object.values(WinningLine)) {
+      this.winningLines[line].classList.remove(Piece.Dot)
+      this.winningLines[line].classList.remove(Piece.Cross)
+    }
+  }
 }
 
 //-------------------------------------------------------------------------------------------------

@@ -51,6 +51,7 @@ class Game {
     this.header = document.getElementById("header") as Header
     this.board  = document.getElementById("board")  as Board
     this.header.addEventListener("join", (ev) => this.onJoin((ev as JoinEvent).detail.name))
+    this.header.addEventListener("replay", () => this.onReplay())
     this.board.addEventListener("turn", (ev) => this.onTurn((ev as TurnEvent).detail.position))
   }
 
@@ -62,8 +63,13 @@ class Game {
     this.send({ type: Command.Join, name })
   }
 
+  onReplay() {
+    this.send({ type: Command.Replay })
+  }
+
   onPlayerReady({ player }: PlayerReadyEvent) {
     this.header.reset(player)
+    this.board.reset()
   }
 
   onGameStarted({ player, opponent }: GameStartedEvent) {
@@ -89,8 +95,8 @@ class Game {
   }
 
   onOpponentAbandoned({ player }: OpponentAbandonedEvent) {
-    this.header.update(player)
     this.board.abandon()
+    this.header.end(player)
   }
 
   onPlayerWon({ player, line }: PlayerWonEvent) {
