@@ -14,6 +14,22 @@ provided by a Node.js websocket server.
 > npm run build      # build production assets
 ```
 
+## Repository Structure
+
+The repository includes:
+
+```console
+    └── index.html          - page layout and templates
+    └── public              - static assets
+    └── src
+        └── interface.ts    - abstract types used by both client and server
+        └── server.ts       - THE WEBSOCKET SERVER
+        └── client.ts       - THE WEBSOCKET CLIENT
+        └── client
+            └── header.ts   - a webcomponent
+            └── board.ts    - a webcomponent
+```
+
 ![screenshot](./doc/mobile.png)
 
 
@@ -260,18 +276,3 @@ _coming soon_
 _coming soon_
 
 
-## Repository Structure
-
-The repository includes:
-
-```console
-    └── index.html          - page layout and templates
-    └── public              - static assets 
-    └── src
-        └── interface.ts    - abstract types used by both client and server
-        └── server.ts       - THE WEBSOCKET SERVER
-        └── client.ts       - THE WEBSOCKET CLIENT
-        └── client
-            └── header.ts   - a webcomponent
-            └── board.ts    - a webcomponent
-```
