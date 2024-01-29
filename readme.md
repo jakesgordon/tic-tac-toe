@@ -295,6 +295,17 @@ hide elements.
 
 ## The Server
 
-_coming soon_
+The [server](./src/server.ts) does the bulk of the work. It provides a web socket server that
+adds a new player to the lobby when a new client connects and starts listening for commands
+from that client. When a command is received it is passed to `lobby.execute` which updates
+the game state and sends events back to each player.
 
+The **server** consists of 3 main modules:
 
+  * [player](./src/server/player.ts) - a small class to manage the player state
+  * [board](./src/server/board.ts) - a small class to manage the board state
+  * [lobby](./src/server/lobby.ts) - the main class that executes commands and updates the
+    player and board state before sending events back to the client(s)
+
+In addition, if the server detects a websocket close then it sends a `LeaveCommand` to the lobby
+which removes the player from the system.
