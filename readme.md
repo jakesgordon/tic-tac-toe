@@ -280,9 +280,9 @@ handle(event: AnyEvent) {
 
 ## The Client
 
-The [client](./src/client.ts) is fairly simple and naive. It responds to events from the user
-by sending commands to the server, and then it responds to events sent back from the server by
-updating the UX for the user.
+The [client](./src/client.ts) is fairly simple and naive. It handles events from the user
+by sending commands to the server, and then it [responds to events](./src/client.ts#L159)
+sent back from the server by updating the UX for the user.
 
 It is broken up into 2 web components, the [header](./src/client/header.ts) renders the current
 game information to the user, while the [board](./src/client/board.ts) renders the tic-tac-toe
@@ -297,8 +297,8 @@ hide elements.
 
 The [server](./src/server.ts) does the bulk of the work. It provides a web socket server that
 adds a new player to the lobby when a new client connects and starts listening for commands
-from that client. When a command is received it is passed to `lobby.execute` which updates
-the game state and sends events back to each player.
+from that client. When a command is received it is passed to [lobby.execute](./src/server/lobby.ts#L24)
+which updates the game state and sends events back to each player.
 
 The **server** consists of 3 main modules:
 
@@ -307,5 +307,4 @@ The **server** consists of 3 main modules:
   * [lobby](./src/server/lobby.ts) - the main class that executes commands and updates the
     player and board state before sending events back to the client(s)
 
-In addition, if the server detects a websocket close then it sends a `LeaveCommand` to the lobby
-which removes the player from the system.
+In addition, if the server detects a websocket close then it removes the player from the system.
