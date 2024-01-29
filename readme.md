@@ -49,9 +49,9 @@ There are 3  main components
     to the server in response to user actions and then updates the UX in response to
     events it receives back from the server.
   * [server.ts](./src/server.ts) is the websocket server that does all the heavy lifting and manages
-    a `Lobby` of `Players` and the `Game` that they are currently playing. It responds
-    to commands it receives from the websocket clients by updating game state and
-    sending events back.
+    a [lobby](./src/server/lobby.ts#L17) of [players](./src/server/player.ts#L19) and the game [board](./src/server/board.ts#L9)
+    that they are currently playing. It responds to the commands it receives from the websocket
+    clients by updating game state and sending events back.
   * [interface.ts](./src/interface.ts) contains the enums, commands, and event types shared
     between the [client](./src/client.ts) and the [server](./src/server.ts)
 
@@ -302,9 +302,9 @@ which updates the game state and sends events back to each player.
 
 The **server** consists of 3 main modules:
 
-  * [player](./src/server/player.ts) - a small class to manage the player state
-  * [board](./src/server/board.ts) - a small class to manage the board state
-  * [lobby](./src/server/lobby.ts) - the main class that executes commands and updates the
+  * [player](./src/server/player.ts#L19) - a small class to manage the player state
+  * [board](./src/server/board.ts#L9) - a small class to manage the board state
+  * [lobby](./src/server/lobby.ts#L17) - the main class that executes commands and updates the
     player and board state before sending events back to the client(s)
 
 In addition, if the server detects a websocket close then it removes the player from the system.
