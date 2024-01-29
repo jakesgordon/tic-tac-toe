@@ -1,7 +1,7 @@
 # Tic Tac Toe - Node
 
 This repository includes an implementation of a simple Tic Tac Toe game with multiplayer support
-provided by a Node.js websocket server. You can play the game at [ttt.jakesgordon.com](https://ttt.jakesgordon.com),
+provided by a Node.js websocket server. You can play the game at [https://ttt.jakesgordon.com](https://ttt.jakesgordon.com),
 but of course you'll need to wait for a second player to join. You can always play against
 yourself if you use 2 browsers or 2 separate devices.
 
