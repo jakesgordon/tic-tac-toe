@@ -53,7 +53,7 @@ There are 3  main components
     that they are currently playing. It responds to the commands it receives from the websocket
     clients by updating game state and sending events back.
   * [interface.ts](./src/interface.ts) contains the enums, commands, and event types shared
-    between the [client](./src/client.ts) and the [server](./src/server.ts)
+    between the client and the server.
 
 ## Interface - Enums
 
